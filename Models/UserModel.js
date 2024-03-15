@@ -15,7 +15,15 @@ var UserSchema = new mongoose.Schema(
         role: {
             type: String,
             enum: ['admin', 'producteur', 'acheteur']
-        }
+        },
+        is_blocked: {
+            type: String,
+            default: "0",
+        },
+        is_verified: {
+            type: String,
+            default: "0",
+        },
     },
     {
         timestamps: true,

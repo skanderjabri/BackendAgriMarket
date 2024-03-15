@@ -26,10 +26,10 @@ var ProducteurSchema = new mongoose.Schema({
         type: Number,
     },
     modes_production: { // Conventionnel, biologique, etc
-        type: [String],
+        type: String,
     },
     certifications: {    // Bio, Label Rouge, etc.
-        type: [String],
+        type: String,
     },
     photos_exploitation: {
         type: [String],

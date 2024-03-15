@@ -17,4 +17,4 @@ const router = express.Router()
 const { CreateProducteur } = require("../Controllers/ProducteurController")
 router.post('/SignUpProducteur', upload.any(), CreateProducteur)
 
-module.exports = router
+module.exports = router 

@@ -3,7 +3,6 @@ const { encryptPassword } = require("../Config/CryptPassword");
 
 /************************************** CreateProducteur *************************************** */
 const CreateProducteur = async (req, res) => {
-    const Images = req.files;
     const {
         email,
         password,
@@ -17,15 +16,15 @@ const CreateProducteur = async (req, res) => {
         superficie_terres_agricoles,
         modes_production,
         certifications,
-        photos_exploitation,
         description_exploitation,
     } = req.body;
+    const photos_exploitation = req.files;
 
     role = "producteur";
 
     try {
         const allImages = []
-        for (const img of Images) {
+        for (const img of photos_exploitation) {
             allImages.push(img.filename)
         }
         const existingProducteur = await Producteur.findOne({ email });
@@ -48,14 +47,13 @@ const CreateProducteur = async (req, res) => {
             superficie_terres_agricoles,
             modes_production,
             certifications,
-            photos_exploitation,
             description_exploitation,
             photos_exploitation: allImages,
             role
         });
 
         await NewProducteur.save();
-        res.status(201).json({ message: 'ok bien insérer', producteur: NewProducteur });
+        res.status(201).json({ message: 'ok', producteur: NewProducteur });
     } catch (error) {
         res.status(500).json({
             message: 'Internal Server Error',
