@@ -1,4 +1,5 @@
 const Actualite = require("../Models/ActualiteModel");
+const imageDafult = "test.png"
 /************************************** CreateActualité *************************************** */
 
 
