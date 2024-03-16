@@ -10,6 +10,13 @@ app.use(cors());
 
 require("dotenv").config();
 const PORT = process.env.PORT || 8200;
+
+
+app.get('/testserver', (req, res) => {
+
+    res.json({ msg: "SERVER AGRIMARKET IS RUNNING " })
+})
+
 app.listen(PORT, () => {
     console.log(`Serveur en écoute sur le port ${PORT}`);
 });
