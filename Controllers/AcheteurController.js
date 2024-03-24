@@ -1,6 +1,7 @@
 const { encryptPassword } = require("../Config/CryptPassword");
 const Acheteur = require("../Models/AcheteurModel")
 const imageDafult = "test.png"
+
 /************************************** CreateAcheteur *************************************** */
 const CreateAcheteur = async (req, res) => {
     const {
@@ -17,11 +18,20 @@ const CreateAcheteur = async (req, res) => {
         adresse_entreprise,
         ville_entreprise,
         Description_entreprise,
+        code_postale_entreprise,
         email_entreprise,
         telephone_entreprise,
     } = req.body;
-    const logo_entreprise = req.file ? req.file.filename : imageDafult;
+    let logo_entreprise = ""
+    let image_user = "";
 
+    for (const file of req.files) {
+        if (file.fieldname === "logo_entreprise") {
+            logo_entreprise = file.filename;
+        } else if (file.fieldname === "image_user") {
+            image_user = file.filename
+        }
+    }
     role = "acheteur";
 
     try {
@@ -33,6 +43,7 @@ const CreateAcheteur = async (req, res) => {
 
         const CryptPassword = await encryptPassword(password);
         const NewAcheteur = new Acheteur({
+
             email,
             password: CryptPassword,
             nom_representant_entreprise,
@@ -46,9 +57,11 @@ const CreateAcheteur = async (req, res) => {
             adresse_entreprise,
             ville_entreprise,
             Description_entreprise,
+            code_postale_entreprise,
             email_entreprise,
             telephone_entreprise,
             logo_entreprise,
+            image_user,
             role
         });
 

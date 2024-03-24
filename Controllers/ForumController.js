@@ -1,5 +1,7 @@
 const Forum = require("../Models/ForumModel");
+const ForumComment = require("../Models/ForumCommentModel");
 const imageDafult = "test.png"
+const mongoose = require("mongoose")
 /************************************** CreateForum  *************************************** */
 const CreateForum = async (req, res) => {
     const {
@@ -51,6 +53,13 @@ const GetAllForum = async (req, res) => {
             .skip(skipCount)
             .limit(limit);
 
+        for (let i = 0; i < ListeForum.length; i++) {
+            const forumId = ListeForum[i]._id;
+            const countComments = await ForumComment.countDocuments({ forumId });
+            // Ajout dynamique du champ NbresCommentaires à l'objet forum
+            ListeForum[i]._doc.NbresCommentaires = countComments;
+        }
+
         ListeForum = ListeForum.map(forum => ({
             ...forum.toObject(),
             NbresVues: forum.vues.length,
@@ -58,7 +67,7 @@ const GetAllForum = async (req, res) => {
         }));
 
         return res.status(200).json({
-            message: 'OK',
+            message: 'ok',
             ListeForum: ListeForum,
             totalCount: totalCount,
             limit: limit,
@@ -68,7 +77,6 @@ const GetAllForum = async (req, res) => {
         return res.status(500).json({ message: "error", error: error.message });
     }
 };
-
 
 /************************************** AddVuToForum  *************************************** */
 const AddVuToForum = async (req, res) => {
@@ -112,7 +120,7 @@ const GetSingleForum = async (req, res) => {
         forum.NbresLikes = forum.likes.length;
 
         return res.status(200).json({
-            message: 'OK',
+            message: 'ok',
             forum: forum,
         });
     } catch (error) {
@@ -121,10 +129,33 @@ const GetSingleForum = async (req, res) => {
 };
 
 
+/************************************** LikeDislikeForum  *************************************** */
+const LikeDislikeForum = async (req, res) => {
+    const { userId, ForumId } = req.body;
+
+    try {
+        const forum = await Forum.findById(ForumId);
+        if (!forum) {
+            return res.status(404).json({ message: "forum non trouvé" });
+        }
+        const existingLikeIndex = forum.likes.findIndex(like => like.userId.toString() === userId);
+        if (existingLikeIndex !== -1) {
+            forum.likes.splice(existingLikeIndex, 1);
+            await forum.save();
+            return res.status(200).json({ message: "Like supprime", forum: forum });
+        }
+        forum.likes.push({ userId: userId });
+        await forum.save();
+        return res.status(200).json({ message: "Like ajoute", forum: forum });
+    } catch (error) {
+        return res.status(500).json({ message: "error", error: error.message });
+    }
+};
 
 module.exports = {
     CreateForum,
     GetAllForum,
     AddVuToForum,
-    GetSingleForum
+    GetSingleForum,
+    LikeDislikeForum,
 }

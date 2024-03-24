@@ -1,6 +1,6 @@
 const Producteur = require("../Models/ProducteurModel")
 const { encryptPassword } = require("../Config/CryptPassword");
-
+const imageDafult = "test.png"
 /************************************** CreateProducteur *************************************** */
 const CreateProducteur = async (req, res) => {
     const {
@@ -18,15 +18,21 @@ const CreateProducteur = async (req, res) => {
         certifications,
         description_exploitation,
     } = req.body;
-    const photos_exploitation = req.files;
 
     role = "producteur";
+    const photos_exploitation = [];
+    let image_user = "";
+
+    for (const file of req.files) {
+        if (file.fieldname === "image_user") {
+            image_user = file.filename;
+        } else if (file.fieldname === "photos_exploitation") {
+            photos_exploitation.push(file.filename);
+        }
+    }
 
     try {
-        const allImages = []
-        for (const img of photos_exploitation) {
-            allImages.push(img.filename)
-        }
+
         const existingProducteur = await Producteur.findOne({ email });
 
         if (existingProducteur) {
@@ -48,7 +54,8 @@ const CreateProducteur = async (req, res) => {
             modes_production,
             certifications,
             description_exploitation,
-            photos_exploitation: allImages,
+            photos_exploitation,
+            image_user,
             role
         });
 

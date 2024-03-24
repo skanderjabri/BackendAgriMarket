@@ -36,6 +36,9 @@ var ProducteurSchema = new mongoose.Schema({
     },
     description_exploitation: {
         type: String
+    },
+    image_user: {
+        type: String
     }
 },
     {

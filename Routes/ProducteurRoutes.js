@@ -15,6 +15,6 @@ const upload = multer({ storage: storage })
 
 const router = express.Router()
 const { CreateProducteur } = require("../Controllers/ProducteurController")
-router.post('/SignUpProducteur', upload.any(), CreateProducteur)
+router.post('/SignUpProducteur', upload.any(),CreateProducteur)
 
 module.exports = router 

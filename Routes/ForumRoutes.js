@@ -1,6 +1,12 @@
 const express = require("express")
 const multer = require("multer")
-const { CreateForum, GetAllForum, AddVuToForum, GetSingleForum } = require("../Controllers/ForumController")
+const {
+    CreateForum,
+    GetAllForum,
+    AddVuToForum,
+    GetSingleForum,
+    LikeDislikeForum
+} = require("../Controllers/ForumController")
 
 
 var storage = multer.diskStorage({
@@ -20,5 +26,6 @@ router.post('/CreateForum', upload.single("image_Cover"), CreateForum)
 router.get('/GetAllForum', GetAllForum)
 router.post('/AddVuToForum', AddVuToForum)
 router.get('/GetSingleForum/:idForum', GetSingleForum)
+router.post('/LikeDislikeForum', LikeDislikeForum)
 
 module.exports = router

@@ -15,7 +15,7 @@ const upload = multer({ storage: storage })
 
 const router = express.Router()
 const { CreateAcheteur, GetAllAcheteur } = require("../Controllers/AcheteurController")
-router.post('/SignUpAcheteur', upload.single("logo_entreprise"), CreateAcheteur)
+router.post('/SignUpAcheteur', upload.any(), CreateAcheteur)
 router.post('/GetAllAcheteur', GetAllAcheteur)
 
 module.exports = router

@@ -46,6 +46,9 @@ var AcheteurSchema = new mongoose.Schema({
     },
     logo_entreprise: {
         type: String,
+    },
+    image_user: {
+        type: String
     }
 },
     {

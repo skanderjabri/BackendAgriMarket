@@ -25,24 +25,15 @@ const CreateForumCategorie = async (req, res) => {
 /************************************** GetAllForumCategorie  *************************************** */
 
 const GetAllForumCategorie = async (req, res) => {
-    const limit = parseInt(req.query.limit) || 9;
-    const page = parseInt(req.query.page) || 1;
 
     try {
 
-        const totaleCount = await ForumCategorie.countDocuments({});
-        const skipCount = (page - 1) * limit;
         const ListeForumCategorie = await ForumCategorie.find({})
             .sort({ createdAt: -1 })
-            .skip(skipCount)
-            .limit(limit);
 
         return res.status(201).json({
             message: 'ok',
             ListeForumCategorie: ListeForumCategorie,
-            totaleCount,
-            limit,
-            page
         })
     }
     catch (error) {
